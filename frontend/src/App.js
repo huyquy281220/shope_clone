@@ -1,6 +1,4 @@
 import "./App.css";
-import { useContext } from "react";
-import UserContext from "./store/Context";
 import { Routes, Route } from "react-router-dom";
 
 //
@@ -27,7 +25,7 @@ function App() {
                 <Route path="/user/login" element={<Login />}></Route>
                 <Route path="/admin" element={<Admin />}></Route>
                 <Route
-                    path="*"
+                    path="/*"
                     element={
                         <>
                             <Header />
@@ -35,7 +33,7 @@ function App() {
                                 <Route path="/" element={<Body />}></Route>
                                 <Route path="/mall" element={<Mall />} />
                                 <Route
-                                    path={`/user/account/profile/id=:id`}
+                                    path="/user/account/profile/id=:id"
                                     element={
                                         <PrivateRoute>
                                             <MyAccount />
@@ -50,7 +48,7 @@ function App() {
                                         </PrivateRoute>
                                     }
                                 />
-                                <Route path="/product/details" element={<ProductDetail />} />
+                                <Route path="/product/details/:id" element={<ProductDetail />} />
                                 <Route path="/error" element={<ErrorPage />} />
                             </Routes>
                             <Footer />

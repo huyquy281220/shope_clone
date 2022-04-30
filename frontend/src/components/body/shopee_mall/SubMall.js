@@ -1,6 +1,6 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import UserContext from "../../../store/Context";
+// import UserContext from "../../../store/Context";
 import numberWithCommas from "../../../utils/formatPrice/numberWithCommas";
 import axios from "axios";
 
@@ -9,18 +9,25 @@ function SubMall() {
     const navigate = useNavigate();
 
     useEffect(() => {
+        let isSuccess = true;
         axios
-            .get("/products")
-            .then((res) => setProducts(res.data))
+            .get(`${process.env.REACT_APP_API_URL}/products`)
+            .then((res) => {
+                if (isSuccess) {
+                    setProducts(res.data);
+                }
+            })
             .catch((err) => navigate("/error", { err }));
 
-        return setProducts([]);
+        return () => {
+            isSuccess = false;
+        };
     }, []);
 
     const handleProduct = (e) => {
         // const parent = e.target.parentElement;
         const currentId = e.target.getAttribute("item-id");
-        navigate("/product/details", { state: products[currentId - 1] });
+        navigate(`/product/details/${currentId}`, { state: products[currentId - 1] });
     };
 
     return (

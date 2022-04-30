@@ -38,7 +38,22 @@
     height: 100%;
     object-fit: cover;
 }
+.swiper-button-prev,
+.swiper-button-next {
+    background-color: rgba(0, 0, 0, 0.18);
+}
 
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+    background-color: rgba(0, 0, 0, 0.32);
+}
+
+.swiper-button-prev::after,
+.swiper-button-next::after {
+    color: #fff !important;
+    font-weight: 900;
+    font-size: 2.4rem !important;
+}
 .mySwiper {
     max-width: 797px;
     width: 100%;

@@ -1,4 +1,3 @@
-import Header from "../../header/Header";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -19,12 +18,12 @@ function Mall() {
         const paramsString = queryString.stringify(filters);
         if (filters.type == null) {
             axios
-                .get(`/mall?${paramsString}`)
+                .get(`${process.env.REACT_APP_API_URL}/mall?${paramsString}`)
                 .then((res) => setPostList(res.data))
                 .catch((err) => navigate("/error", { err }));
         } else {
             axios
-                .get(`/mall/sort?${paramsString}`)
+                .get(`${process.env.REACT_APP_API_URL}/mall/sort?${paramsString}`)
                 .then((res) => setPostList(res.data))
                 .catch((err) => navigate("/error", { err }));
         }

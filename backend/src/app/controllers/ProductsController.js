@@ -20,9 +20,11 @@ class ProductsController {
     }
     // [get] /products/:id
     getOne(req, res, next) {
+        const qty = req.params.qty;
         Products.findById({ _id: req.params.id })
             .then((product) => {
-                res.json(product);
+                const newProduct = { ...product, qtySelected: qty };
+                res.json(newProduct);
             })
             .catch(next);
     }

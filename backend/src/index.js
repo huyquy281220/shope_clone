@@ -8,7 +8,12 @@ const route = require("./routes/index");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
-app.use(cors());
+app.use(
+    cors({
+        origin: true,
+        credentials: true,
+    })
+);
 //connect db
 db.connect();
 // view engine

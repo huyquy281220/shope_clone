@@ -13,7 +13,7 @@ function NavbarHeader() {
     const navigate = useNavigate();
     const handleLogout = () => {
         axios
-            .post("/user/logout", { _id: user._id })
+            .post(`${process.env.REACT_APP_API_URL}/user/logout`, { _id: user._id })
             .then(() => {
                 dispatch(logout());
                 navigate("/");
@@ -43,7 +43,7 @@ function NavbarHeader() {
                         href="https://shopee.vn/web"
                         target="_blank"
                         rel="noreferrer"
-                        className="navbar__hover separate-item qr-hover"
+                        className="navbar__hover separate-item qr__hover"
                     >
                         Tải ứng dụng
                         <div className="navbar-qr">
@@ -87,6 +87,12 @@ function NavbarHeader() {
                     <a href="" className="navbar__hover">
                         <i className="far fa-bell mr-right"></i>
                         Thông báo
+                        <div className="notify__hover">
+                            <ul className="notify-list">
+                                <li className="notify-list-item"></li>
+                            </ul>
+                            <button className="all-notify">Xem tất cả</button>
+                        </div>
                     </a>
                     <a
                         href="https://help.shopee.vn/vn/s/"
@@ -107,7 +113,7 @@ function NavbarHeader() {
                             <a href="" className="user-avatar navbar__hover">
                                 <i className="fas fa-user"></i>
                                 <span className="username">{user.username}</span>
-                                <div className="user-hover">
+                                <div className="user__hover">
                                     <Link to={`user/account/profile/id=${user._id}`}>
                                         Tài khoản của tôi
                                     </Link>

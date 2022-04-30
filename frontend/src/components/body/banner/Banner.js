@@ -24,10 +24,19 @@ function Banner() {
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
+        let isSuccess = true;
         axios
-            .get("http://localhost:4000/test")
-            .then((res) => setProducts(res.data))
+            .get(`${process.env.REACT_APP_API_URL}/test`)
+            .then((res) => {
+                if (isSuccess) {
+                    setProducts(res.data);
+                }
+            })
             .catch((err) => console.error(err));
+
+        return () => {
+            isSuccess = false;
+        };
     }, []);
 
     return (

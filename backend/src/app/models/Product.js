@@ -11,9 +11,9 @@ const ProductSchema = new Schema(
         price: { type: Number },
         qtySelected: { type: Number, default: 1 },
     },
-    { timestamps: true }
+    { timestamps: true, _id: false }
 );
 
-ProductSchema.plugin(AutoIncrement, { id: "product_id", inc_field: "_id" });
+ProductSchema.plugin(AutoIncrement, { id: "product-id", inc_field: "_id" });
 
 module.exports = mongoose.model("Products", ProductSchema);

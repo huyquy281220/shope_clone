@@ -5,10 +5,19 @@ function Category() {
     const [categories, setCategories] = useState([]);
 
     useEffect(() => {
+        let isSuccess = true;
         axios
-            .get("http://localhost:4000/category")
-            .then((res) => setCategories(res.data))
+            .get(`${process.env.REACT_APP_API_URL}/category`)
+            .then((res) => {
+                if (isSuccess) {
+                    setCategories(res.data);
+                }
+            })
             .catch((err) => console.log(err));
+
+        return () => {
+            isSuccess = false;
+        };
     }, []);
 
     return (
@@ -17,9 +26,6 @@ function Category() {
                 <span>Danh mục</span>
             </div>
             <div className="category-content">
-                {/* <button className="btn-right">
-                    <i className="fas fa-arrow-right"></i>
-                </button> */}
                 {categories.map((category) => (
                     <div className="category-item" key={category._id}>
                         <a href="">

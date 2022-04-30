@@ -4,6 +4,7 @@ const ProductRouter = require("./product");
 const MallRouter = require("./mall");
 const SearchRouter = require("./search");
 const AdminRouter = require("./admin");
+const NotifyRouter = require("./notify");
 
 function route(app) {
     app.use("/admin", AdminRouter);
@@ -12,6 +13,7 @@ function route(app) {
     app.use("/", SearchRouter);
     app.use("/", ProductRouter);
     app.use("/", MallRouter);
+    app.use("/", NotifyRouter);
 }
 
 module.exports = route;

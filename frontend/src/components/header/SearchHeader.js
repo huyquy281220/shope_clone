@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import debounce from "lodash.debounce";
 import axios from "axios";
@@ -31,23 +31,12 @@ function SearchHeader() {
         setToggleOn(true);
         setSearchTerm(e.target.value);
         axios
-            .get(`/search?s=${searchItem}`)
+            .get(`${process.env.REACT_APP_API_URL}/search?s=${searchItem}`)
             .then((res) => setItemOnSearch(res.data))
             .catch((err) => navigate("/error", { err }));
     };
 
     const debounceOnSearch = debounce(handleSearchTermChange, 200);
-
-    // const handleEnter = (e) => {
-    //     const searchItem = e.target.value;
-    //     if (e.key === "Enter") {
-    //         setSearchHistory([...searchHistory,searchItem]);
-    //     }
-    // };
-
-    // const handleClick = (e) => {
-    //     setToggleOn(true);
-    // };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -83,10 +72,8 @@ function SearchHeader() {
                             type="text"
                             className="search__header-input"
                             placeholder="Tìm kiếm sản phẩm"
-                            value={searchTerm}
+                            // value={searchTerm}
                             onChange={debounceOnSearch}
-                            // onKeyPress={handleEnter}
-                            // onFocus={handleClick}
                         />
                         <button className="search__header-btn">
                             <i className="fas fa-search search-btn"></i>

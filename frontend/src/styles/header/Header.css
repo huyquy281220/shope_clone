@@ -30,7 +30,36 @@
 .navbar__hover:hover {
     color: rgba(255, 255, 255, 0.7);
 }
-.qr-hover {
+.navbar__hover:hover ~ .notify__hover {
+    display: block;
+}
+.notify__hover {
+    display: none;
+    width: 150px;
+    height: 100px;
+    background-color: #fff;
+    border-radius: 3px;
+    position: relative;
+}
+.notify__hover::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 5px;
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+    border-bottom: 4px solid red;
+    animation: show-notify 2s ease-in-out;
+}
+
+@keyframes show-notify {
+    from {
+    }
+    to {
+    }
+}
+
+.qr__hover {
     position: relative;
 }
 .qr-hover::before {
@@ -191,14 +220,14 @@
     height: 20px;
     background-color: transparent;
 }
-.user-avatar:hover .user-hover {
+.user-avatar:hover .user__hover {
     display: block;
 }
 .username {
     display: inline-block;
     margin-left: 5px;
 }
-.user-hover {
+.user__hover {
     position: absolute;
     top: 30px;
     right: 70%;
@@ -207,7 +236,7 @@
     border-radius: 3px;
     z-index: 20;
 }
-.user-hover a {
+.user__hover a {
     display: inline-block;
     width: 150px;
     height: 40px;
@@ -216,15 +245,15 @@
     color: #000;
     background-color: #fff;
 }
-.user-hover a:hover {
+.user__hover a:hover {
     background-color: rgb(228, 207, 207);
     color: rgb(27, 13, 218);
 }
-.user-hover a:first-child {
+.user__hover a:first-child {
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
 }
-.user-hover a:last-child {
+.user__hover a:last-child {
     border-bottom-left-radius: 3px;
     border-bottom-right-radius: 3px;
 }
