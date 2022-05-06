@@ -12,6 +12,7 @@ import Admin from "./components/admin/Admin";
 import MyAccount from "./components/users/MyAccount";
 import Cart from "./components/products/Cart";
 import Mall from "./components/body/shopee_mall/Mall";
+// import Notify from "./components/"
 import ErrorPage from "./utils/error/Error";
 import ProductDetail from "./components/products/ProductDetail";
 import PrivateRoute from "./components/users/PrivateRoute";

@@ -7,7 +7,6 @@ import numberWithCommas from "../../utils/formatPrice/numberWithCommas";
 function Cart() {
     const { user } = useContext(UserContext);
     const newCart = user.cart;
-    const [isCheckedAll, setIsCheckedAll] = useState(false);
     const [newQty, setNewQty] = useState(
         newCart.map((product) => ({
             qty: product.qtySelected,
@@ -81,7 +80,6 @@ function Cart() {
                                     <input
                                         type="checkbox"
                                         className="productsCart-check checkAll"
-                                        defaultChecked={isCheckedAll}
                                         onChange={(e) => handleCheckAll(e)}
                                     />
                                     Sản phẩm
@@ -118,25 +116,27 @@ function Cart() {
                                         <span>VND</span>
                                     </td>
                                     <td className="td-quantity">
-                                        <button
-                                            className="minus"
-                                            product-id={product._id}
-                                            onClick={handleMinus}
-                                        >
-                                            <i className="fas fa-minus"></i>
-                                        </button>
-                                        <input
-                                            type="text"
-                                            className="product-quantity"
-                                            value={product.qtySelected}
-                                        />
-                                        <button
-                                            className="plus"
-                                            product-id={product._id}
-                                            onClick={handlePlus}
-                                        >
-                                            <i className="fas fa-plus"></i>
-                                        </button>
+                                        <div style={{ height: "32.5px" }}>
+                                            <button
+                                                className="minus"
+                                                product-id={product._id}
+                                                onClick={handleMinus}
+                                            >
+                                                <i className="fas fa-minus"></i>
+                                            </button>
+                                            <input
+                                                type="text"
+                                                className="product-quantity"
+                                                value={product.qtySelected}
+                                            />
+                                            <button
+                                                className="plus"
+                                                product-id={product._id}
+                                                onClick={handlePlus}
+                                            >
+                                                <i className="fas fa-plus"></i>
+                                            </button>
+                                        </div>
                                     </td>
                                     <td className="td-money">
                                         <span

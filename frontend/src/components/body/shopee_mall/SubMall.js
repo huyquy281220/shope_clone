@@ -11,7 +11,7 @@ function SubMall() {
     useEffect(() => {
         let isSuccess = true;
         axios
-            .get(`${process.env.REACT_APP_API_URL}/products`)
+            .get(`${process.env.REACT_APP_API_URL}/products?limit=5`)
             .then((res) => {
                 if (isSuccess) {
                     setProducts(res.data);
@@ -24,38 +24,33 @@ function SubMall() {
         };
     }, []);
 
-    const handleProduct = (e) => {
-        // const parent = e.target.parentElement;
-        const currentId = e.target.getAttribute("item-id");
-        navigate(`/product/details/${currentId}`, { state: products[currentId - 1] });
+    const handleProduct = (id) => {
+        navigate(`/product/details/${id}`, { state: products[id - 1] });
     };
 
     return (
         <div className="subMall">
             <div className="subMall__header">
-                <a href="">Shopee mall</a>
+                <Link to="/mall">Shopee mall</Link>
                 <Link to="/mall">
                     Xem tất cả
                     <i className="fas fa-chevron-right"></i>
                 </Link>
             </div>
-            <div className="subMall__header-content">
-                <div className="subMall__header-slider"></div>
-                <div className="subMall__header-items">
+            <div className="subMall__body-content">
+                <div className="subMall-items">
                     {products.map((product) => (
                         <div
                             className="subMall-item"
-                            item-id={product._id}
-                            onClick={handleProduct}
+                            onClick={() => handleProduct(product._id)}
                             key={product._id}
+                            style={{ border: "1px solid #ccc" }}
                         >
-                            <div className="item-image" item-id={product._id}>
-                                <img src={product.image} alt="" item-id={product._id} />
+                            <div className="item-image">
+                                <img src={product.image} alt={product.desc} />
                             </div>
-                            <div className="item-desc" item-id={product._id}>
-                                {product.desc}
-                            </div>
-                            <div className="item-price" item-id={product._id}>
+                            <div className="item-desc">{product.desc}</div>
+                            <div className="item-price">
                                 <span>₫</span>
                                 {numberWithCommas(product.price)}
                             </div>

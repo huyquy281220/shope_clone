@@ -3,6 +3,7 @@ import "../../styles/products/ProductDetail.css";
 import { useContext, useState, useRef } from "react";
 import UserContext from "../../store/Context";
 import { useLocation, useNavigate } from "react-router-dom";
+import numberWithCommas from "../../utils/formatPrice/numberWithCommas";
 import axios from "axios";
 // import axiosJWT from "../../utils/RefreshToken/refreshToken";
 
@@ -15,7 +16,7 @@ function ProductDetail() {
     const navigate = useNavigate();
     const { user } = useContext(UserContext);
     const [addToCart, setAddToCart] = useState(false);
-    const current = useRef("");
+    const currentValue = useRef("");
 
     const handleQuantity = (product) => {
         const updateCart = user.cart;
@@ -33,14 +34,15 @@ function ProductDetail() {
 
     const handleAddToCart = (type = "add") => {
         setAddToCart(true);
-        handleBuy(type);
         setTimeout(() => {
+            handleBuy(type);
             setAddToCart(false);
         }, 2000);
     };
 
     const handleBuy = (type) => {
-        const qtyBuy = document.querySelector(".product-quantity").current.value;
+        const qtyBuy = currentValue.current.defaultValue;
+        console.log(type);
         if (user) {
             axios
                 .get(`${process.env.REACT_APP_API_URL}/products/${state._id}?qty=${qtyBuy}`)
@@ -51,7 +53,8 @@ function ProductDetail() {
 
             localStorage.setItem("user", JSON.stringify(user));
             handleUpdate(user, user.cart);
-            return type === "add" ? null : navigate("/user/cart");
+            // navigate("/user/cart");
+            return 1;
         } else {
             navigate("/user/login");
         }
@@ -93,8 +96,8 @@ function ProductDetail() {
                     <div className="productDetail-right">
                         <div className="product-desc">{state.desc}</div>
                         <div className="product-price">
-                            <span>₫</span>
-                            {state.price}
+                            <span className="currency-unit">₫</span>
+                            {numberWithCommas(state.price)}
                         </div>
                         <div className="transport">
                             <div className="transport-left">Vận chuyển</div>
@@ -108,7 +111,9 @@ function ProductDetail() {
                                         height="15px"
                                     />
                                     Miễn phí vận chuyển
-                                    <div>Miễn phí vận chuyển cho đơn hàng trên 300.000 VND</div>
+                                    <div style={{ color: "rgba(0,0,0,.54)" }}>
+                                        Miễn phí vận chuyển cho đơn hàng trên 300.000 VND
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -118,17 +123,25 @@ function ProductDetail() {
                                 <button className="minus">
                                     <i className="fas fa-minus"></i>
                                 </button>
-                                <input type="text" defaultValue="1" className="product-quantity" />
+                                <input
+                                    type="text"
+                                    ref={currentValue}
+                                    defaultValue="1"
+                                    className="product-quantity"
+                                />
                                 <button className="plus">
                                     <i className="fas fa-plus"></i>
                                 </button>
+                                <div className="product-available" style={{ color: "#757575" }}>
+                                    {state.quantity} sản phẩm có sẵn
+                                </div>
                             </div>
                         </div>
                         <div className="product-buy">
                             <button
                                 className="add"
                                 onClick={() => {
-                                    // handleBuy();
+                                    handleBuy();
                                     handleAddToCart();
                                 }}
                             >

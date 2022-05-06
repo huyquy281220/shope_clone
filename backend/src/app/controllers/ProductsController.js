@@ -8,22 +8,26 @@ class ProductsController {
             const newProduct = await product.save();
             res.status(201).json(newProduct);
         } catch (err) {
+            console.log(err);
             res.status(500).json(err);
         }
     }
     // [GET] /products
     getAll(req, res, next) {
+        const limitProduct = req.query?.limit ? req.query.limit : null;
+        const skipProduct = req.query?.skip ? req.query.skip : null;
         Products.find({})
-            .limit(5)
+            .skip(Number(skipProduct))
+            .limit(Number(limitProduct))
             .then((products) => res.json(products))
             .catch(next);
     }
     // [get] /products/:id
     getOne(req, res, next) {
-        const qty = req.params.qty;
-        Products.findById({ _id: req.params.id })
+        const qty = req.query?.qty;
+        Products.findOne({ _id: req.params?.id })
             .then((product) => {
-                const newProduct = { ...product, qtySelected: qty };
+                const newProduct = { ...product._doc, qtySelected: qty };
                 res.json(newProduct);
             })
             .catch(next);

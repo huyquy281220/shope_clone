@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 
 const NotifySchema = new Schema(
     {
+        title: { type: String, maxLength: 70 },
         content: { type: String, maxLength: 255 },
         image: { type: String },
     },

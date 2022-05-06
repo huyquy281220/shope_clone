@@ -9,6 +9,7 @@ const ProductSchema = new Schema(
         image: { type: String },
         desc: { type: String },
         price: { type: Number },
+        quantity: { type: Number },
         qtySelected: { type: Number, default: 1 },
     },
     { timestamps: true, _id: false }

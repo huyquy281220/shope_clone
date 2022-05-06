@@ -5,7 +5,7 @@ var searchArr = [];
 class SearchController {
     // [GET] /search
     getByName(req, res, next) {
-        const searchString = req?.query?.s;
+        const searchString = req.query?.s;
         const indexSearchTerm = searchArr.findIndex((item) => item === searchString);
         console.log(indexSearchTerm);
 
