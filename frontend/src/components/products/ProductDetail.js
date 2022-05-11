@@ -1,9 +1,9 @@
-import "../../styles/products/ProductDetail.css";
+import "styles/products/ProductDetail.css";
 
 import { useContext, useState, useRef } from "react";
-import UserContext from "../../store/Context";
+import UserContext from "store/Context";
 import { useLocation, useNavigate } from "react-router-dom";
-import numberWithCommas from "../../utils/formatPrice/numberWithCommas";
+import numberWithCommas from "utils/formatPrice/numberWithCommas";
 import axios from "axios";
 // import axiosJWT from "../../utils/RefreshToken/refreshToken";
 
@@ -19,6 +19,7 @@ function ProductDetail() {
     const currentValue = useRef("");
 
     const handleQuantity = (product) => {
+        console.log(product);
         const updateCart = user.cart;
         const updateItemIndex = updateCart.findIndex((item) => item._id === product._id);
 
@@ -53,8 +54,7 @@ function ProductDetail() {
 
             localStorage.setItem("user", JSON.stringify(user));
             handleUpdate(user, user.cart);
-            // navigate("/user/cart");
-            return 1;
+            type !== "add" && navigate("/user/cart", { replace: true });
         } else {
             navigate("/user/login");
         }
@@ -62,7 +62,7 @@ function ProductDetail() {
 
     return (
         <div className="productDetail-wrapper">
-            {addToCart === true ? (
+            {addToCart === true && (
                 <div className="overlay">
                     <i
                         style={{ display: "block", fontSize: "7rem", padding: "10px 0 15px" }}
@@ -70,7 +70,7 @@ function ProductDetail() {
                     ></i>
                     Sản phẩm đã được thêm vào giỏ hàng
                 </div>
-            ) : null}
+            )}
             <div className="productDetail__body">
                 <div className="productDetail">
                     <div className="productDetail-left">
@@ -138,16 +138,10 @@ function ProductDetail() {
                             </div>
                         </div>
                         <div className="product-buy">
-                            <button
-                                className="add"
-                                onClick={() => {
-                                    handleBuy();
-                                    handleAddToCart();
-                                }}
-                            >
+                            <button className="add" onClick={handleAddToCart}>
                                 Thêm vào giỏ hàng
                             </button>
-                            <button className="buy" onClick={handleBuy}>
+                            <button className="buy" onClick={() => handleBuy("buy")}>
                                 Mua ngay
                             </button>
                         </div>

@@ -1,8 +1,8 @@
 import "../../styles/products/Cart.css";
 import { useState, useContext } from "react";
-import UserContext from "../../store/Context";
+import UserContext from "store/Context";
 import { handleUpdate } from "../products/ProductDetail";
-import numberWithCommas from "../../utils/formatPrice/numberWithCommas";
+import numberWithCommas from "utils/formatPrice/numberWithCommas";
 
 function Cart() {
     const { user } = useContext(UserContext);
@@ -41,10 +41,9 @@ function Cart() {
         });
     };
 
-    const handlePlus = (e) => {
-        const a = e.target.getAttribute("product-id");
+    const handlePlus = (id) => {
         newCart.forEach((product) => {
-            if (product._id == a) {
+            if (product._id === id) {
                 product.qtySelected++;
                 handleQty(product.qtySelected, product._id);
                 handleUpdate(user, user.cart);
@@ -53,10 +52,9 @@ function Cart() {
         });
     };
 
-    const handleMinus = (e) => {
-        const a = e.target.getAttribute("product-id");
+    const handleMinus = (id) => {
         newCart.forEach((product) => {
-            if (product._id == a && product.qtySelected > 0) {
+            if (product._id === id && product.qtySelected > 0) {
                 product.qtySelected--;
                 handleQty(product.qtySelected, product._id);
                 handleUpdate(user, user.cart);
@@ -119,20 +117,18 @@ function Cart() {
                                         <div style={{ height: "32.5px" }}>
                                             <button
                                                 className="minus"
-                                                product-id={product._id}
-                                                onClick={handleMinus}
+                                                onClick={() => handleMinus(product._id)}
                                             >
                                                 <i className="fas fa-minus"></i>
                                             </button>
                                             <input
                                                 type="text"
                                                 className="product-quantity"
-                                                value={product.qtySelected}
+                                                defaultValue={product.qtySelected}
                                             />
                                             <button
                                                 className="plus"
-                                                product-id={product._id}
-                                                onClick={handlePlus}
+                                                onClick={() => handlePlus(product._id)}
                                             >
                                                 <i className="fas fa-plus"></i>
                                             </button>
