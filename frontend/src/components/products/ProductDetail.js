@@ -2,24 +2,24 @@ import "styles/products/ProductDetail.css";
 
 import { useContext, useState, useRef } from "react";
 import UserContext from "store/Context";
+import { updateUser } from "store/Actions";
 import { useLocation, useNavigate } from "react-router-dom";
 import numberWithCommas from "utils/formatPrice/numberWithCommas";
 import axios from "axios";
 // import axiosJWT from "../../utils/RefreshToken/refreshToken";
 
-const handleUpdate = (user, data) => {
-    axios.put(`${process.env.REACT_APP_API_URL}/user/${user._id}`, { cart: data });
+const handleUpdate = (userId, data) => {
+    axios.put(`${process.env.REACT_APP_API_URL}/user/${userId}`, { cart: data });
 };
 
 function ProductDetail() {
     const { state } = useLocation();
     const navigate = useNavigate();
-    const { user } = useContext(UserContext);
+    const { user, dispatch } = useContext(UserContext);
     const [addToCart, setAddToCart] = useState(false);
     const currentValue = useRef("");
 
     const handleQuantity = (product) => {
-        console.log(product);
         const updateCart = user.cart;
         const updateItemIndex = updateCart.findIndex((item) => item._id === product._id);
 
@@ -33,17 +33,19 @@ function ProductDetail() {
         return updateCart;
     };
 
-    const handleAddToCart = (type = "add") => {
+    const handleAddToCart = () => {
+        const type = "add";
         setAddToCart(true);
         setTimeout(() => {
             handleBuy(type);
+            dispatch(updateUser(user));
             setAddToCart(false);
         }, 2000);
     };
 
     const handleBuy = (type) => {
-        const qtyBuy = currentValue.current.defaultValue;
         console.log(type);
+        const qtyBuy = currentValue.current.defaultValue;
         if (user) {
             axios
                 .get(`${process.env.REACT_APP_API_URL}/products/${state._id}?qty=${qtyBuy}`)
@@ -52,13 +54,18 @@ function ProductDetail() {
                 })
                 .catch((err) => navigate("/error", { error: err }));
 
-            localStorage.setItem("user", JSON.stringify(user));
-            handleUpdate(user, user.cart);
-            type !== "add" && navigate("/user/cart", { replace: true });
+            setTimeout(() => {
+                localStorage.setItem("user", JSON.stringify(user));
+                handleUpdate(user._id, user.cart);
+                dispatch(updateUser(user));
+                type !== "add" && navigate("/user/cart");
+            }, 1500);
         } else {
-            navigate("/user/login");
+            setTimeout(() => navigate("/user/login"), 1500);
         }
     };
+
+    const handleChangeValue = () => {};
 
     return (
         <div className="productDetail-wrapper">
@@ -126,7 +133,8 @@ function ProductDetail() {
                                 <input
                                     type="text"
                                     ref={currentValue}
-                                    defaultValue="1"
+                                    value="1"
+                                    onChange={handleChangeValue}
                                     className="product-quantity"
                                 />
                                 <button className="plus">

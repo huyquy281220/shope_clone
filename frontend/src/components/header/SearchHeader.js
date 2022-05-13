@@ -1,23 +1,21 @@
-import { useState, useContext } from "react";
+import { useState, useContext, memo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import UserContext from "store/Context";
 import debounce from "lodash.debounce";
 import numberWithCommas from "utils/formatPrice/numberWithCommas";
 import axios from "axios";
 
+import cartEmpty from "assets/img/cart/cart empty.jpg";
+
 function SearchHeader() {
     const { user } = useContext(UserContext);
     const [searchTerm, setSearchTerm] = useState("");
-    const [searchHistory, setSearchHistory] = useState([]);
     const [itemOnSearch, setItemOnSearch] = useState([]);
     const [toggleOn, setToggleOn] = useState(false);
     const navigate = useNavigate();
 
-    console.log(itemOnSearch);
-    console.log(typeof itemOnSearch);
     const handleSearchTermChange = (e) => {
         const searchItem = e.target.value;
-        // setToggleOn(true);
         setSearchTerm(e.target.value);
         axios
             .get(`${process.env.REACT_APP_API_URL}/search?s=${searchItem}`)
@@ -52,10 +50,6 @@ function SearchHeader() {
         );
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-    };
-
     return (
         <div className="search__header">
             <div className="search__header-logo">
@@ -75,7 +69,6 @@ function SearchHeader() {
                     <form
                         className="searchForm"
                         action=""
-                        onSubmit={handleSubmit}
                         onBlur={() => setToggleOn(false)}
                     >
                         <input
@@ -83,7 +76,7 @@ function SearchHeader() {
                             className="search__header-input"
                             placeholder="Tìm kiếm sản phẩm"
                             defaultValue=""
-                            // onClick={()=> setToggleOn(true)}
+                            onFocus={() => setToggleOn(true)}
                             onChange={debounceOnSearch}
                         />
                         <button className="search__header-btn">
@@ -91,7 +84,7 @@ function SearchHeader() {
                         </button>
                     </form>
 
-                    {itemOnSearch.length > 0 ? (
+                    {toggleOn && itemOnSearch.length > 0 ? (
                         <HandleHistorySearch history={itemOnSearch} />
                     ) : null}
                 </div>
@@ -108,49 +101,68 @@ function SearchHeader() {
             </div>
             <div className="search__header-cart">
                 <Link to="/user/cart" className="cart-icon">
-                    <div className="items-in-cart">{user.cart.length}</div>
+                    {user && user.cart.length > 0 ? (
+                        <div className="items-in-cart">{user.cart.length}</div>
+                    ) : null}
                     <i className="fas fa-shopping-cart"></i>
                     <div className="notify-cart">
-                        <div className="notify-title" style={{ fontSize: "1.4rem" }}>
-                            Sản phẩm mới thêm
-                        </div>
-                        <ul className="notify-list">
-                            {user.cart
-                                .map((item, key) => (
-                                    <li
-                                        className="notify-list-item"
-                                        style={{ padding: "0 7px" }}
-                                        key={key}
-                                    >
-                                        <Link to={`/product/details/${item._id}`} state={item}>
-                                            <img
-                                                src={item.image}
-                                                alt=""
-                                                width="35px"
-                                                height="35px"
-                                            />
-                                            <div className="notify-body">
-                                                <div className="notify-name">{item.name}</div>
-                                                <div
-                                                    className="notify-price"
-                                                    style={{
-                                                        color: "#ee4d2d",
-                                                        lineHeight: "2.5",
-                                                        fontSize: "1.2rem",
-                                                    }}
+                        {user?.cart?.length > 0 ? (
+                            <>
+                                <div className="notify-title" style={{ fontSize: "1.4rem" }}>
+                                    Sản phẩm mới thêm
+                                </div>
+                                <ul className="notify-list">
+                                    {user.cart
+                                        .map((item, key) => (
+                                            <li
+                                                className="notify-list-item"
+                                                style={{ padding: "0 7px" }}
+                                                key={key}
+                                            >
+                                                <Link
+                                                    to={`/product/details/${item._id}`}
+                                                    state={item}
                                                 >
-                                                    {numberWithCommas(item.price)} VND
-                                                </div>
-                                            </div>
-                                        </Link>
-                                    </li>
-                                ))
-                                .reverse()
-                                .slice(0, 5)}
-                        </ul>
-                        <Link to="" className="all-notify">
-                            Xem giỏ hàng
-                        </Link>
+                                                    <img
+                                                        src={item.image}
+                                                        alt=""
+                                                        width="35px"
+                                                        height="35px"
+                                                    />
+                                                    <div className="notify-body">
+                                                        <div className="notify-name">
+                                                            {item.name}
+                                                        </div>
+                                                        <div
+                                                            className="notify-price"
+                                                            style={{
+                                                                color: "#ee4d2d",
+                                                                lineHeight: "2.5",
+                                                                fontSize: "1.2rem",
+                                                            }}
+                                                        >
+                                                            {numberWithCommas(item.price)} VND
+                                                        </div>
+                                                    </div>
+                                                </Link>
+                                            </li>
+                                        ))
+                                        .reverse()
+                                        .slice(0, 5)}
+                                </ul>
+                                <Link to="/user/cart" className="all-notify">
+                                    Xem giỏ hàng
+                                </Link>
+                            </>
+                        ) : (
+                            <div
+                                className="cart-empty"
+                                style={{ textAlign: "center", height: "150px", paddingTop: "15px" }}
+                            >
+                                <img src={cartEmpty} alt="" width="70px" height="80px" />
+                                <p style={{ fontSize: "1.4rem" }}>Giỏ hàng trống</p>
+                            </div>
+                        )}
                     </div>
                 </Link>
             </div>
@@ -158,4 +170,4 @@ function SearchHeader() {
     );
 }
 
-export default SearchHeader;
+export default memo(SearchHeader);

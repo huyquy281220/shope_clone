@@ -14,12 +14,17 @@ function TodaySuggestion() {
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
+        let isSuccess = true;
         axios
             .get(
                 `${process.env.REACT_APP_API_URL}/products?${queryString.stringify(suggestProduct)}`
             )
             .then((res) => setProductToday(res.data))
             .catch((err) => console.error(err));
+
+        return () => {
+            isSuccess = false;
+        };
     }, [suggestProduct]);
 
     const handleProduct = (id) => {
@@ -69,7 +74,7 @@ function TodaySuggestion() {
                                         className="item-image skeleton-box"
                                         style={{ height: "188px" }}
                                     >
-                                        <svg width="55px" height="65px" viewBox="0 0">
+                                        <svg width="55px" height="65px" viewBox="0 0 50 50">
                                             <path
                                                 fill="#cac8ca"
                                                 stroke="none"
