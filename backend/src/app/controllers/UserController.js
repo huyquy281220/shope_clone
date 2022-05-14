@@ -35,10 +35,7 @@ class UserController {
     // [POST] /user/login
     async login(req, res, next) {
         try {
-            const user = await User.findOneAndUpdate(
-                { email: req.body.email },
-                { $set: { isOnline: true } }
-            );
+            const user = await User.findOne({ email: req.body.email });
             if (!user) return res.status(404).json("wrong email");
 
             const bytes = CryptoJs.AES.decrypt(user.password, process.env.SECRET_KEY);
@@ -108,8 +105,6 @@ class UserController {
                 });
 
                 RefreshToken.updateOne({ user: ObjectId(user.id) }, { token: newRefreshToken });
-                // .then((data) => console.log(data))
-                // .catch((err) => console.log(err));
 
                 res.status(200).json({ accessTokenAuth: newAccessToken });
             });
