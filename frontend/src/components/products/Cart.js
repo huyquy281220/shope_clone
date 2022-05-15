@@ -8,6 +8,7 @@ import numberWithCommas from "utils/formatPrice/numberWithCommas";
 function Cart() {
     const { user, dispatch } = useContext(UserContext);
     const newCart = user.cart;
+    const [popupBuy,setPopupBuy] = useState(false)
     const [newQty, setNewQty] = useState(
         newCart.map((product) => ({
             qty: product.qtySelected,
@@ -72,6 +73,14 @@ function Cart() {
         localStorage.setItem("user", JSON.stringify(user));
         handleUpdate(user._id, user.cart);
     };
+
+    const handleBuyProducts = ()=>{
+        setPopupBuy(true);
+        setTimeout(() => {
+            setPopupBuy(false);
+            handleDelete()
+        },1000)
+    }
 
     const handleChangeQty = () => {};
 
@@ -188,6 +197,7 @@ function Cart() {
                                             borderRadius: "4px",
                                             cursor: "pointer",
                                         }}
+                                        onClick={() =>handleBuyProducts}
                                     >
                                         Mua Hàng
                                     </button>
