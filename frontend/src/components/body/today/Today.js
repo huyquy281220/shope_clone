@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import queryString from "query-string";
@@ -65,7 +65,7 @@ function TodaySuggestion() {
                             </div>
                         </div>
                     ))}
-                    {isLoading &&
+                    {!isLoading &&
                         Array(5)
                             .fill()
                             .map((key) => (
@@ -92,7 +92,7 @@ function TodaySuggestion() {
                                     ></div>
                                 </div>
                             ))}
-                    <button className="btn btn-light" onClick={() => handleLimit()}>
+                    <button className="btn btn-light" onClick={handleLimit}>
                         Xem Thêm
                     </button>
                 </div>
@@ -101,4 +101,4 @@ function TodaySuggestion() {
     );
 }
 
-export default TodaySuggestion;
+export default memo(TodaySuggestion);

@@ -1,14 +1,14 @@
-import "../../styles/products/Cart.css";
-import { useState, useContext } from "react";
+import "styles/products/Cart.css";
+import { useState, useContext, useMemo } from "react";
 import UserContext from "store/Context";
 import { updateUser } from "store/Actions";
-import { handleUpdate } from "../products/ProductDetail";
+import { handleUpdate } from "components/products/ProductDetail";
 import numberWithCommas from "utils/formatPrice/numberWithCommas";
 
 function Cart() {
     const { user, dispatch } = useContext(UserContext);
     const newCart = user.cart;
-    const [popupBuy,setPopupBuy] = useState(false)
+    // const [popupBuy,setPopupBuy] = useState(false)
     const [newQty, setNewQty] = useState(
         newCart.map((product) => ({
             qty: product.qtySelected,
@@ -62,6 +62,7 @@ function Cart() {
                 handleUpdate(user._id, user.cart);
                 localStorage.setItem("user", JSON.stringify(user));
             }
+            dispatch(updateUser(user));
         });
     };
 
@@ -74,13 +75,13 @@ function Cart() {
         handleUpdate(user._id, user.cart);
     };
 
-    const handleBuyProducts = ()=>{
-        setPopupBuy(true);
-        setTimeout(() => {
-            setPopupBuy(false);
-            handleDelete()
-        },1000)
-    }
+    const handleBuyProducts = () => {
+        // setPopupBuy(true);
+        // setTimeout(() => {
+        //     setPopupBuy(false);
+        //     handleDelete();
+        // }, 1000);
+    };
 
     const handleChangeQty = () => {};
 
@@ -197,7 +198,7 @@ function Cart() {
                                             borderRadius: "4px",
                                             cursor: "pointer",
                                         }}
-                                        onClick={() =>handleBuyProducts}
+                                        onClick={() => handleBuyProducts}
                                     >
                                         Mua Hàng
                                     </button>
