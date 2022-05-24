@@ -11,6 +11,7 @@ const ProductSchema = new Schema(
         price: { type: Number },
         quantity: { type: Number },
         qtySelected: { type: Number, default: 1 },
+        checked: { type: Boolean, default: false },
     },
     { timestamps: true, _id: false }
 );
